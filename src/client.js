@@ -153,7 +153,7 @@ class DnsClient {
                 const len = Buffer.allocUnsafe(2);
                 len.writeUInt16BE(buf.length);
                 socket.write(len);
-                socket.end(packet.toBuffer());
+                socket.end(buf);
                 timer = setTimeout(() => {
                     // end socket with error
                     resolved = true;

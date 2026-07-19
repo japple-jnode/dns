@@ -92,7 +92,92 @@ class DnsServer extends EventEmitter {
         });
 
         // tcp server setup
-        
+        this.tcpServer.on('error', (err) => this.emit('error', err));
+        this.tcpServer.on('listening', () => this.emit('tcpListening'));
+        this.tcpServer.on('connection', (socket) => {
+            let len = null;
+            socket.on('readable', async () => {
+                while (true) {
+                    if (len === null) {
+                        const lenBuf = socket.read(2);
+                        if (!lenBuf) break;
+                        len = lenBuf.readUInt16BE();
+                        continue;
+                    } else {
+                        const data = socket.read(len);
+                        if (!data) break;
+
+                        len = null;
+
+                        // parse packet
+                        let pack;
+                        try { pack = DnsPacket.from(msg); } catch (e) { console.error(e); return; }
+
+                        // ignore weird packets
+                        if (packet.qr !== 0) return;
+
+                        // send dns packet function
+                        const respond = (pack = {}) => {
+                            if (!(pack instanceof DnsPacket)) pack = new DnsPacket(pack);
+                            pack.id = packet.id;
+                            pack.qr = DnsPacket.QR.RESPONSE;
+                            pack.opcode = packet.opcode;
+                            pack.rd = packet.rd;
+                            pack.questions = packet.questions;
+
+                            const buf = packet.toBuffer();
+                            const len = Buffer.allocUnsafe(2);
+                            len.writeUInt16BE(buf.length);
+                            socket.write(len);
+                            socket.end(buf);
+                        };
+
+                        // verify packet format
+                        if (packet.questions > 1) return await respond({ rcode: DnsPacket.RCODE.FORMAT_ERROR });
+
+                        // ctx object
+                        const ctx = {
+                            packet, respond, server: this, params: {}, source: 'tcp',
+                            name: packet.questions[0]?.qname,
+                            type: packet.questions[0]?.qtype,
+                            class: packet.questions[0]?.qclass
+                        };
+
+                        // env object
+                        const env = {
+                            label: packet.questions[0]?.qname ? packet.questions[0].qname.split('.').filter(Boolean).reverse() : [],
+                            labelPointer: 0
+                        };
+
+                        let handler;
+                        try {
+                            handler = await DnsServer.route(this.router, env, ctx, this.options);
+                            handler ??= 'default';
+                        } catch (err) { // error while routing
+                            env.error = e;
+                            this.emit('error', err, env, ctx);
+                            handler = 'error';
+                        }
+
+                        await DnsServer.handle(handler, env, ctx, this.options);
+                        socket.destroySoon();
+
+                        return;
+                    }
+
+                    break;
+                }
+            });
+
+            socket.once('close', () => {
+                if (resolved) return;
+                reject(new Error('TCP socket closed before received response'));
+            });
+
+            socket.on('error', (err) => {
+                reject(err);
+            });
+        });
     }
 
     // route
