@@ -80,7 +80,7 @@ class DnsServer extends EventEmitter {
             let handler;
             try {
                 handler = await DnsServer.route(this.router, env, ctx, this.options);
-                handler ??= defaultHandler;
+                handler ??= 'default';
             } catch (err) { // error while routing
                 env.error = e;
                 this.emit('error', err, env, ctx);
