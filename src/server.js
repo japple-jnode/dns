@@ -67,6 +67,7 @@ class DnsServer extends EventEmitter {
             // ctx object
             const ctx = {
                 packet, respond, server: this, params: {}, source: 'udp',
+                name: packet.questions[0]?.qname,
                 type: packet.questions[0]?.qtype,
                 class: packet.questions[0]?.qclass
             };
