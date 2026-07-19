@@ -1,0 +1,28 @@
+{
+  "name": "@jnode/dns",
+  "version": "1.0.0",
+  "description": "Simple DNS server package for Node.js",
+  "keywords": [
+    "dns",
+    "jnode"
+  ],
+  "homepage": "https://github.com/japple-jnode/dns#readme",
+  "bugs": {
+    "url": "https://github.com/japple-jnode/dns/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/japple-jnode/dns.git"
+  },
+  "license": "MIT",
+  "author": "JustApple",
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "exports": {
+    "import": "./src/index.mjs",
+    "require": "./src/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Hello, DNS.\""
+  }
+}
