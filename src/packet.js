@@ -237,9 +237,9 @@ class DnsPacket {
                 const lastParts = qnameParts.slice(i).join('.');
 
                 if (labelRegistry.has(lastParts)) {
-                    const len = (0b11000000 << 8) | labelRegistry.get(lastParts)
+                    const len = (0b11000000 << 8) | labelRegistry.get(lastParts);
                     buf.writeUInt16BE(len, offset);
-                    offset += 2;
+                    offset++;
                     break;
                 }
 
@@ -265,9 +265,9 @@ class DnsPacket {
                 const lastParts = anameParts.slice(i).join('.');
 
                 if (labelRegistry.has(lastParts)) {
-                    const len = (0b11000000 << 8) | labelRegistry.get(lastParts)
+                    const len = (0b11000000 << 8) | labelRegistry.get(lastParts);
                     buf.writeUInt16BE(len, offset);
-                    offset += 2;
+                    offset++;
                     break;
                 }
 
