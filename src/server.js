@@ -169,13 +169,8 @@ class DnsServer extends EventEmitter {
                 }
             });
 
-            socket.once('close', () => {
-                if (resolved) return;
-                reject(new Error('TCP socket closed before received response'));
-            });
-
             socket.on('error', (err) => {
-                reject(err);
+                socket.destroy();
             });
         });
     }
