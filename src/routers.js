@@ -32,12 +32,12 @@ class LabelRouter {
             // example: '@ A .com.example', '@ .com.example', '.localhost'
             const routeEnd = key.startsWith('@');
             const routeType = DnsPacket.TYPE[key.substring(routeEnd ? 1 : 0, firstDotIndex).trim()];
-            const routePath = key.substring(firstDotIndex).split('/').slice(1);
+            const routeLabel = key.substring(firstDotIndex).split('.').slice(1)
 
             // expand map
             let current = this.map;
             let args = [];
-            for (let segment of routePath) {
+            for (let segment of routeLabel) {
                 if (segment.startsWith('%:')) {
                     args.push(segment.substring(2));
                     if (!current[':']) current[':'] = {};
