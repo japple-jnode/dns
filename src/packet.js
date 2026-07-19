@@ -249,7 +249,7 @@ class DnsPacket {
                 buf.write(qnameParts[i], offset, 'ascii');
                 offset += qnameParts[i].length;
             }
-            if (buf[offset] === 0) offset++; // end
+            offset++; // end
 
             buf.writeUInt16BE(question.qtype, offset);
             offset += 2;
@@ -277,7 +277,7 @@ class DnsPacket {
                 buf.write(anameParts[i], offset, 'ascii');
                 offset += anameParts[i].length;
             }
-            if (buf[offset] === 0) offset++; // end
+            offset++; // end
 
             buf.writeUInt16BE(answer.atype, offset);
             offset += 2;
