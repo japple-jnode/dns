@@ -45,8 +45,8 @@ class RecordHandler {
     handle(ctx, env) {
         if (!ctx.class) return ctx.respond({ rcode: DnsPacket.RCODE.NOT_IMPLEMENTED });
         this.packet.answers[0].aname = ctx.name;
-        this.packet.answers[0].type = ctx.type;
-        this.packet.answers[0].class = ctx.class;
+        this.packet.answers[0].atype = ctx.type;
+        this.packet.answers[0].aclass = ctx.class;
         return ctx.respond(this.packet);
     }
 }

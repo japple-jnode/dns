@@ -90,6 +90,9 @@ class DnsServer extends EventEmitter {
 
             await DnsServer.handle(handler, env, ctx, this.options);
         });
+
+        // tcp server setup
+        
     }
 
     // route
