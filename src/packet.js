@@ -215,7 +215,7 @@ class DnsPacket {
 
     // generate buffer from packet data
     toBuffer() {
-        const buf = Buffer.alloc(512); // pre allocate max DNS packet size
+        const buf = Buffer.alloc(4096); // pre allocate max DNS packet size
         let offset = 12; // header size
 
         // header
