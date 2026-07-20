@@ -243,9 +243,9 @@ class DnsServer extends EventEmitter {
         }
     }
 
-    listen(udpCb, tcpCb, port = 53) {
-        this.udpServer.bind(port, udpCb);
-        this.tcpServer.listen(port, tcpCb);
+    listen(udpCb, tcpCb, port = 53, address = '0.0.0.0') {
+        this.udpServer.bind(port, address, udpCb);
+        this.tcpServer.listen(port, address, tcpCb);
     }
 
     close(udpCb, tcpCb) {
