@@ -111,7 +111,7 @@ class DnsServer extends EventEmitter {
 
                         // parse packet
                         let pack;
-                        try { pack = DnsPacket.from(msg); } catch (e) { console.error(e); return; }
+                        try { pack = DnsPacket.from(data); } catch (e) { console.error(e); return; }
 
                         // ignore weird packets
                         if (packet.qr !== 0) return;
