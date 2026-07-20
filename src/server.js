@@ -69,7 +69,11 @@ class DnsServer extends EventEmitter {
                 packet, respond, server: this, params: {}, source: 'udp',
                 name: packet.questions[0]?.qname,
                 type: packet.questions[0]?.qtype,
-                class: packet.questions[0]?.qclass
+                class: packet.questions[0]?.qclass,
+                remote: {
+                    address: rinfo.address,
+                    port: rinfo.port
+                }
             };
 
             // env object
@@ -140,7 +144,11 @@ class DnsServer extends EventEmitter {
                             packet, respond, server: this, params: {}, source: 'tcp',
                             name: packet.questions[0]?.qname,
                             type: packet.questions[0]?.qtype,
-                            class: packet.questions[0]?.qclass
+                            class: packet.questions[0]?.qclass,
+                            remote: {
+                                address: socket.remoteAddress,
+                                port: socket.remotePort
+                            }
                         };
 
                         // env object
