@@ -52,7 +52,7 @@ class DnsClient {
 
             // parse packet
             let packet;
-            try { packet = DnsPacket.from(msg); } catch (e) { console.error(e); return; }
+            try { packet = DnsPacket.from(msg); } catch (e) { return; }
 
             // ignore weird packets
             if (packet.qr !== 1) return;
@@ -177,7 +177,7 @@ class DnsClient {
 
                         // parse packet
                         let pack;
-                        try { pack = DnsPacket.from(data); } catch (e) { console.error(e); return; }
+                        try { pack = DnsPacket.from(data); } catch (e) { return; }
 
                         // ignore weird packets
                         if (pack.qr !== 1) continue;
