@@ -114,8 +114,8 @@ class DnsServer extends EventEmitter {
                         len = null;
 
                         // parse packet
-                        let pack;
-                        try { pack = DnsPacket.from(data); } catch (e) { console.error(e); return; }
+                        let packet;
+                        try { packet = DnsPacket.from(data); } catch (e) { console.error(e); return; }
 
                         // ignore weird packets
                         if (packet.qr !== 0) return;
@@ -129,7 +129,7 @@ class DnsServer extends EventEmitter {
                             pack.rd = packet.rd;
                             pack.questions = packet.questions;
 
-                            const buf = packet.toBuffer();
+                            const buf = pack.toBuffer();
                             const len = Buffer.allocUnsafe(2);
                             len.writeUInt16BE(buf.length);
                             socket.write(len);
